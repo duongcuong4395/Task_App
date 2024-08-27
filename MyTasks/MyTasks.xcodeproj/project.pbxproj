@@ -16,10 +16,13 @@
 		4F0DB67D2C7D7F4200DC8D02 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DB67C2C7D7F4200DC8D02 /* TaskViewModel.swift */; };
 		4F0DB6802C7D7FC200DC8D02 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DB67F2C7D7FC200DC8D02 /* CoreDataManager.swift */; };
 		4F0DB6842C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DB6822C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld */; };
+		4F389F2F2C7E0A840027D4E4 /* AppManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F389F2E2C7E0A840027D4E4 /* AppManage.swift */; };
 		4FD8CF1F2C7DC012005846F6 /* TaskCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF1D2C7DC012005846F6 /* TaskCD+CoreDataClass.swift */; };
 		4FD8CF202C7DC012005846F6 /* TaskCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF1E2C7DC012005846F6 /* TaskCD+CoreDataProperties.swift */; };
 		4FD8CF232C7DC6AF005846F6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF222C7DC6AF005846F6 /* NotificationManager.swift */; };
 		4FD8CF252C7DCD42005846F6 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */; };
+		4FD8CF272C7DD590005846F6 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF262C7DD590005846F6 /* TaskRowView.swift */; };
+		4FD8CF292C7DD62E005846F6 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF282C7DD62E005846F6 /* TaskDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,10 +36,13 @@
 		4F0DB67C2C7D7F4200DC8D02 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		4F0DB67F2C7D7FC200DC8D02 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		4F0DB6832C7D800A00DC8D02 /* TaskCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskCoreData.xcdatamodel; sourceTree = "<group>"; };
+		4F389F2E2C7E0A840027D4E4 /* AppManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManage.swift; sourceTree = "<group>"; };
 		4FD8CF1D2C7DC012005846F6 /* TaskCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskCD+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4FD8CF1E2C7DC012005846F6 /* TaskCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskCD+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4FD8CF222C7DC6AF005846F6 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		4FD8CF262C7DD590005846F6 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
+		4FD8CF282C7DD62E005846F6 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +96,7 @@
 		4F0DB6712C7D7E9500DC8D02 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4F389F2D2C7E0A720027D4E4 /* App */,
 				4FD8CF212C7DC691005846F6 /* NotificationManager */,
 				4F0DB67E2C7D7FAF00DC8D02 /* CoreDataManager */,
 			);
@@ -128,6 +135,8 @@
 			children = (
 				4F0DB6772C7D7F0700DC8D02 /* TaskListView.swift */,
 				4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */,
+				4FD8CF262C7DD590005846F6 /* TaskRowView.swift */,
+				4FD8CF282C7DD62E005846F6 /* TaskDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -156,6 +165,14 @@
 				4F0DB6822C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		4F389F2D2C7E0A720027D4E4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4F389F2E2C7E0A840027D4E4 /* AppManage.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		4FD8CF212C7DC691005846F6 /* NotificationManager */ = {
@@ -236,16 +253,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD8CF292C7DD62E005846F6 /* TaskDetailView.swift in Sources */,
 				4FD8CF252C7DCD42005846F6 /* AddTaskView.swift in Sources */,
 				4FD8CF202C7DC012005846F6 /* TaskCD+CoreDataProperties.swift in Sources */,
 				4F0DB6802C7D7FC200DC8D02 /* CoreDataManager.swift in Sources */,
 				4FD8CF232C7DC6AF005846F6 /* NotificationManager.swift in Sources */,
 				4F0DB6662C7D7B0B00DC8D02 /* ContentView.swift in Sources */,
+				4F389F2F2C7E0A840027D4E4 /* AppManage.swift in Sources */,
 				4F0DB6842C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld in Sources */,
 				4FD8CF1F2C7DC012005846F6 /* TaskCD+CoreDataClass.swift in Sources */,
 				4F0DB6642C7D7B0B00DC8D02 /* MyTasksApp.swift in Sources */,
 				4F0DB67A2C7D7F2200DC8D02 /* TaskModel.swift in Sources */,
 				4F0DB67D2C7D7F4200DC8D02 /* TaskViewModel.swift in Sources */,
+				4FD8CF272C7DD590005846F6 /* TaskRowView.swift in Sources */,
 				4F0DB6782C7D7F0700DC8D02 /* TaskListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

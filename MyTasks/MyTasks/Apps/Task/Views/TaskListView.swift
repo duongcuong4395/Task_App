@@ -6,20 +6,18 @@
 //
 
 import SwiftUI
-
-// Views/TaskListView.swift
+/*
 struct TaskListView: View {
     @StateObject private var viewModel = TaskListViewModel()
     
     @State private var isShowingAddTaskView = false
     @State private var selectedCategory: String = "All"
-   
-    var filteredTasks: [TaskCD] {
-       if selectedCategory == "All" {
-           return viewModel.tasksCD
-       } else {
-           return viewModel.tasksCD.filter { $0.category == selectedCategory }
-       }
+    
+    var sortedTasks: [TaskCD] {
+        let filteredTasks = viewModel.tasksCD.filter { task in
+            selectedCategory == "All" || task.category == selectedCategory
+        }
+        return filteredTasks.sorted(by: { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) })
     }
 
     var body: some View {
@@ -36,13 +34,14 @@ struct TaskListView: View {
                 .padding()
                 
                 List {
-                    ForEach(filteredTasks) { task in
+                    ForEach(viewModel.tasksCD) { task in
                         NavigationLink(destination: TaskDetailView(task: task, viewModel: viewModel)) {
                             TaskRowView(task: task)
                         }
+                        .onDelete(perform: deleteTask)
                     }
-                    .onDelete(perform: deleteTask)
                 }
+                
             }
             .navigationTitle("Tasks")
             .toolbar {
@@ -56,6 +55,16 @@ struct TaskListView: View {
                 AddTaskView(viewModel: viewModel)
             }
         }
+        .task {
+            print("TaskListView.task")
+        }
+        .onAppear{
+            print("TaskListView.onAppear")
+        }
+        .onChange(of: viewModel.tasksCD) { vl, newVL in
+            print("TaskListView.onChange.tasksCD")
+        }
+        .environmentObject(viewModel)
     }
     
     private func deleteTask(at offsets: IndexSet) {
@@ -63,75 +72,82 @@ struct TaskListView: View {
     }
     
 }
+*/
 
-
-struct TaskRowView: View {
-    var task: TaskCD
-    
-    var body: some View {
-        HStack {
-            Text(task.title ?? "No Title")
-            Spacer()
-            Text(task.priority ?? "Medium")
-                .foregroundColor(.gray)
-        }
-    }
+enum Page {
+    case ListTask
+    case TaskDetail
+    case AddTask
 }
 
-
-struct TaskDetailView: View {
-    @ObservedObject var viewModel: TaskListViewModel
+struct ListTaskView: View {
+    @StateObject private var viewModel = TaskListViewModel()
     
-    @State private var title: String
-        @State private var dueDate: Date
-        @State private var priority: String
-        @State private var category: String
-        @State private var isCompleted: Bool
-        
-        var task: TaskCD
-        
-        init(task: TaskCD, viewModel: TaskListViewModel) {
-            self.task = task
-            self.viewModel = viewModel
-            
-            _title = State(initialValue: task.title ?? "")
-            _dueDate = State(initialValue: task.dueDate ?? Date())
-            _priority = State(initialValue: task.priority ?? "Medium")
-            _category = State(initialValue: task.category ?? "Work")
-            _isCompleted = State(initialValue: task.isCompleted)
+    @State private var isShowingAddTaskView = false
+    @State private var selectedCategory: String = "All"
+    
+    var sortedTasks: [TaskCD] {
+        let filteredTasks = viewModel.tasksCD.filter { task in
+            selectedCategory == "All" || task.category == selectedCategory
         }
-        
-        var body: some View {
-            Form {
-                Section(header: Text("Task Details")) {
-                    TextField("Title", text: $title)
-                    DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
-                    Picker("Priority", selection: $priority) {
-                        Text("High").tag("High")
-                        Text("Medium").tag("Medium")
-                        Text("Low").tag("Low")
+        return filteredTasks.sorted(by: { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) })
+    }
+    
+    var body: some View {
+        VStack {
+            
+            switch viewModel.page {
+            case .ListTask:
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            withAnimation {
+                                // isShowingAddTaskView = true
+                                viewModel.page = .AddTask
+                            }
+                        }) {
+                            Label("Add Task", systemImage: "plus")
+                        }
                     }
-                    Picker("Category", selection: $category) {
+                    Picker("Category", selection: $selectedCategory) {
+                        Text("All").tag("All")
                         Text("Work").tag("Work")
                         Text("Personal").tag("Personal")
                         Text("Others").tag("Others")
                     }
-                    Toggle(isOn: $isCompleted) {
-                        Text("Completed")
+                    .pickerStyle(SegmentedPickerStyle())
+                    //.padding()
+                    
+                    ForEach(sortedTasks) { task in
+                        TaskRowView(task: task)
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.taskDetail = task
+                                    viewModel.page = .TaskDetail
+                                }
+                                
+                            }
+                            
                     }
+                    Spacer()
                 }
-            }
-            .navigationTitle("Task Details")
-            .navigationBarItems(trailing: Button("Save") {
-                task.title = title
-                task.dueDate = dueDate
-                task.priority = priority
-                task.category = category
-                task.isCompleted = isCompleted
+                .padding()
+            case .TaskDetail:
+                if let task = viewModel.taskDetail {
+                    TaskDetailView(task: task)
+                        .padding()
+                }
                 
-                viewModel.updateTask(task: task)
-            })
+            case .AddTask:
+                AddTaskView()
+                    .padding()
+            }
         }
+        .environmentObject(viewModel)
+    }
+    
+    private func deleteTask(at offsets: IndexSet) {
+        offsets.map { viewModel.tasksCD[$0] }.forEach(viewModel.deleteTask)
+    }
 }
-
-

@@ -10,7 +10,8 @@ import SwiftUI
 struct AddTaskView: View {
     // MARK: - Properties
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: TaskListViewModel
+    @EnvironmentObject var viewModel: TaskListViewModel
+    
     @ObservedObject var notificationManager = NotificationManager.shared
     
     @State private var title: String = ""
@@ -23,33 +24,66 @@ struct AddTaskView: View {
     
     // MARK: - Views
     var body: some View {
-        NavigationView {
-            Form {
-                TextField("Title", text: $title)
-                DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
-                Picker("Priority", selection: $priority) {
-                    Text("High").tag("High")
-                    Text("Medium").tag("Medium")
-                    Text("Low").tag("Low")
+        VStack {
+            HStack {
+                Button("Cancel") {
+                    withAnimation {
+                        viewModel.page = .ListTask
+                    }
                 }
-                Picker("Category", selection: $category) {
-                    Text("Work").tag("Work")
-                    Text("Personal").tag("Personal")
-                    Text("Others").tag("Others")
+                Spacer()
+            }
+            Form {
+                Section(header: Text("Add Task")) {
+                    TextField("Title", text: $title)
+                    DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
+                    Picker("Priority", selection: $priority) {
+                        HStack {
+                            Text("High")
+                            AppShare.priorityIcon(priority: "High")
+                           
+                        }
+                        .foregroundColor(AppShare.priorityColor(priority: "High"))
+                        .tag("High")
+                        HStack {
+                            Text("Medium")
+                            AppShare.priorityIcon(priority: "Medium")
+                                
+                        }
+                        .foregroundColor(AppShare.priorityColor(priority: "Medium"))
+                        .tag("Medium")
+                        HStack {
+                            Text("Low")
+                            AppShare.priorityIcon(priority: "Low")
+                                
+                        }
+                        .tag("Low")
+                        .foregroundColor(AppShare.priorityColor(priority: "Low"))
+                    }
+                        .foregroundColor(AppShare.priorityColor(priority: priority))
+                    Picker("Category", selection: $category) {
+                        Text("Work").tag("Work")
+                        Text("Personal").tag("Personal")
+                        Text("Others").tag("Others")
+                    }
+                    
+                    HStack {
+                        
+                        
+                        Spacer()
+                        Button("Save") {
+                            withAnimation {
+                                if title.isEmpty {
+                                    return
+                                }
+                                handleSaveAction()
+                                //viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
+                                viewModel.page = .ListTask
+                            }
+                        }
+                    }
                 }
             }
-            .navigationBarTitle("New Task", displayMode: .inline)
-            .navigationBarItems(
-                leading: 
-                        Button("Cancel") {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                , trailing:
-                        Button("Save") {
-                            handleSaveAction()
-                            
-                        }
-            )
             .alert(isPresented: $showPermissionAlert) {
                 Alert(
                     title: Text("Notification Permission Required"),
@@ -58,7 +92,7 @@ struct AddTaskView: View {
                         requestNotificationPermission()
                     },
                     secondaryButton: .cancel {
-                        presentationMode.wrappedValue.dismiss()
+                        //presentationMode.wrappedValue.dismiss()
                     }
                 )
             }
@@ -70,7 +104,7 @@ struct AddTaskView: View {
                        openAppSettings()
                    },
                    secondaryButton: .cancel {
-                       presentationMode.wrappedValue.dismiss()
+                       //presentationMode.wrappedValue.dismiss()
                    }
                )
            }
@@ -87,7 +121,7 @@ extension AddTaskView {
         switch notificationManager.authorizationStatus {
         case .authorized:
             viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
-            presentationMode.wrappedValue.dismiss()
+            //presentationMode.wrappedValue.dismiss()
         case .notDetermined:
             showPermissionAlert = true
         case .denied:
@@ -112,7 +146,7 @@ extension AddTaskView {
     private func requestNotificationPermission() {
         notificationManager.requestAuthorization { granted in
             if granted {
-                viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
+                //viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
                 presentationMode.wrappedValue.dismiss()
             } else {
                 showSettingsAlert = true

@@ -7,18 +7,22 @@
 
 import Foundation
 import CoreData
-
+import Combine
 import UserNotifications
 
+@MainActor
 class TaskListViewModel: ObservableObject {
     @Published var tasksCD: [TaskCD] = []
+    @Published var taskDetail: TaskCD?
+    @Published var page: Page = .ListTask
+    
     private let context = CoreDataManager.shared.persistentContainer.viewContext
     private let notificationManager = NotificationManager.shared
             
     init() {
         fetchTasks()
     }
-    
+    @MainActor
     func addTask(title: String, dueDate: Date?, priority: String, category: String) {
         let newTask = TaskCD(context: context)
         newTask.id = UUID()
@@ -40,15 +44,21 @@ class TaskListViewModel: ObservableObject {
         let request: NSFetchRequest<TaskCD> = TaskCD.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
         request.sortDescriptors = [sortDescriptor]
-        
-        do {
-            tasksCD = try context.fetch(request)
-        } catch {
-            print("Failed to fetch tasks: \(error.localizedDescription)")
+        DispatchQueue.main.async {
+            do {
+                
+                self.tasksCD = try self.context.fetch(request)
+                print("self.tasksCD", self.tasksCD)
+                
+            } catch {
+                print("Failed to fetch tasks: \(error.localizedDescription)")
+            }
         }
+        
     }
     
     func updateTask(task: TaskCD) {
+        objectWillChange.send()
         saveContext()
         fetchTasks()
         
