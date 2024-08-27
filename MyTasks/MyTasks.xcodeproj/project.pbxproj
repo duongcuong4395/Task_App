@@ -18,6 +18,8 @@
 		4F0DB6842C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DB6822C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld */; };
 		4FD8CF1F2C7DC012005846F6 /* TaskCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF1D2C7DC012005846F6 /* TaskCD+CoreDataClass.swift */; };
 		4FD8CF202C7DC012005846F6 /* TaskCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF1E2C7DC012005846F6 /* TaskCD+CoreDataProperties.swift */; };
+		4FD8CF232C7DC6AF005846F6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF222C7DC6AF005846F6 /* NotificationManager.swift */; };
+		4FD8CF252C7DCD42005846F6 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		4F0DB6832C7D800A00DC8D02 /* TaskCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskCoreData.xcdatamodel; sourceTree = "<group>"; };
 		4FD8CF1D2C7DC012005846F6 /* TaskCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskCD+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4FD8CF1E2C7DC012005846F6 /* TaskCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskCD+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4FD8CF222C7DC6AF005846F6 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,7 @@
 		4F0DB6712C7D7E9500DC8D02 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4FD8CF212C7DC691005846F6 /* NotificationManager */,
 				4F0DB67E2C7D7FAF00DC8D02 /* CoreDataManager */,
 			);
 			path = Shared;
@@ -122,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				4F0DB6772C7D7F0700DC8D02 /* TaskListView.swift */,
+				4FD8CF242C7DCD42005846F6 /* AddTaskView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -150,6 +156,14 @@
 				4F0DB6822C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		4FD8CF212C7DC691005846F6 /* NotificationManager */ = {
+			isa = PBXGroup;
+			children = (
+				4FD8CF222C7DC6AF005846F6 /* NotificationManager.swift */,
+			);
+			path = NotificationManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,8 +236,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD8CF252C7DCD42005846F6 /* AddTaskView.swift in Sources */,
 				4FD8CF202C7DC012005846F6 /* TaskCD+CoreDataProperties.swift in Sources */,
 				4F0DB6802C7D7FC200DC8D02 /* CoreDataManager.swift in Sources */,
+				4FD8CF232C7DC6AF005846F6 /* NotificationManager.swift in Sources */,
 				4F0DB6662C7D7B0B00DC8D02 /* ContentView.swift in Sources */,
 				4F0DB6842C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld in Sources */,
 				4FD8CF1F2C7DC012005846F6 /* TaskCD+CoreDataClass.swift in Sources */,

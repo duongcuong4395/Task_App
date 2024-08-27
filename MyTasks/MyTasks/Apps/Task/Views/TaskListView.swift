@@ -62,9 +62,6 @@ struct TaskListView: View {
         offsets.map { viewModel.tasksCD[$0] }.forEach(viewModel.deleteTask)
     }
     
-    private func addTask() {
-        // Navigate to add/edit task view
-    }
 }
 
 
@@ -108,7 +105,7 @@ struct TaskDetailView: View {
             Form {
                 Section(header: Text("Task Details")) {
                     TextField("Title", text: $title)
-                    DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
+                    DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
                     Picker("Priority", selection: $priority) {
                         Text("High").tag("High")
                         Text("Medium").tag("Medium")
@@ -137,38 +134,4 @@ struct TaskDetailView: View {
         }
 }
 
-struct AddTaskView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: TaskListViewModel
-    
-    @State private var title: String = ""
-    @State private var dueDate: Date = Date()
-    @State private var priority: String = "Medium"
-    @State private var category: String = "Work"
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                TextField("Title", text: $title)
-                DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
-                Picker("Priority", selection: $priority) {
-                    Text("High").tag("High")
-                    Text("Medium").tag("Medium")
-                    Text("Low").tag("Low")
-                }
-                Picker("Category", selection: $category) {
-                    Text("Work").tag("Work")
-                    Text("Personal").tag("Personal")
-                    Text("Others").tag("Others")
-                }
-            }
-            .navigationBarTitle("New Task", displayMode: .inline)
-            .navigationBarItems(leading: Button("Cancel") {
-                presentationMode.wrappedValue.dismiss()
-            }, trailing: Button("Save") {
-                viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
-                presentationMode.wrappedValue.dismiss()
-            })
-        }
-    }
-}
+

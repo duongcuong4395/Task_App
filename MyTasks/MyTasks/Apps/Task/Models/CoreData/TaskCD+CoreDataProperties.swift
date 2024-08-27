@@ -22,7 +22,6 @@ extension TaskCD {
     @NSManaged public var priority: String?
     @NSManaged public var title: String?
     @NSManaged public var category: String?
-
 }
 
 extension TaskCD : Identifiable {
