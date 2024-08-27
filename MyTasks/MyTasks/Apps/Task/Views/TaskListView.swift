@@ -78,6 +78,7 @@ enum Page {
     case ListTask
     case TaskDetail
     case AddTask
+    case Dashboard
 }
 
 struct ListTaskView: View {
@@ -100,10 +101,16 @@ struct ListTaskView: View {
             case .ListTask:
                 VStack {
                     HStack {
+                        Button(action: {
+                            withAnimation {
+                                viewModel.page = .Dashboard
+                            }
+                        }) {
+                            Label("Dashboard", systemImage: "list.dash.header.rectangle")
+                        }
                         Spacer()
                         Button(action: {
                             withAnimation {
-                                // isShowingAddTaskView = true
                                 viewModel.page = .AddTask
                             }
                         }) {
@@ -118,18 +125,20 @@ struct ListTaskView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     //.padding()
-                    
-                    ForEach(sortedTasks) { task in
-                        TaskRowView(task: task)
-                            .onTapGesture {
-                                withAnimation {
-                                    viewModel.taskDetail = task
-                                    viewModel.page = .TaskDetail
+                    ScrollView(showsIndicators: false) {
+                        ForEach(sortedTasks) { task in
+                            TaskRowView(task: task)
+                                .onTapGesture {
+                                    withAnimation {
+                                        viewModel.taskDetail = task
+                                        viewModel.page = .TaskDetail
+                                    }
+                                    
                                 }
                                 
-                            }
-                            
+                        }
                     }
+                    
                     Spacer()
                 }
                 .padding()
@@ -142,6 +151,8 @@ struct ListTaskView: View {
             case .AddTask:
                 AddTaskView()
                     .padding()
+            case .Dashboard:
+                DashboardView()
             }
         }
         .environmentObject(viewModel)

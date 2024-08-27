@@ -16,6 +16,8 @@ struct TaskDetailView: View {
     @State private var category: String
     @State private var isCompleted: Bool
     
+    @State private var showingDatePicker = false  // Biến trạng thái để hiển thị DatePicker tùy chỉnh
+    
     var task: TaskCD
     
     init(task: TaskCD) {
@@ -52,6 +54,20 @@ struct TaskDetailView: View {
                 Section(header: Text("Task Detail")) {
                     TextField("Title", text: $title)
                     DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
+                    /*
+                    HStack {
+                        Text("Due Date")
+                        Spacer()
+                        Text(dueDate, style: .date)
+                            .onTapGesture {
+                                showingDatePicker.toggle()
+                            }
+                        Text(dueDate, style: .time)
+                            .onTapGesture {
+                                showingDatePicker.toggle()
+                            }
+                    }
+                    */
                     Picker("Priority", selection: $priority) {
                         
                         
@@ -108,5 +124,28 @@ struct TaskDetailView: View {
                 .ignoresSafeArea(.all)
             }
         }
+        .sheet(isPresented: $showingDatePicker) {
+            CustomDatePicker(selectedDate: $dueDate)
+        }
+    }
+}
+
+
+
+struct CustomDatePicker: View {
+    @Binding var selectedDate: Date
+    
+    var body: some View {
+        VStack {
+            DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
+                .datePickerStyle(GraphicalDatePickerStyle())  // Sử dụng DatePicker kiểu Graphical
+                .labelsHidden()  // Ẩn nhãn để chỉ hiển thị lịch
+            Button("Done") {
+                // Đóng DatePicker khi người dùng nhấn "Done"
+                UIApplication.shared.windows.first?.rootViewController?.dismiss(animated: true, completion: nil)
+            }
+            .padding()
+        }
+        .padding()
     }
 }

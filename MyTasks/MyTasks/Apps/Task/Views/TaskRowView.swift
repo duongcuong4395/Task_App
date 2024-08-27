@@ -19,7 +19,10 @@ struct TaskRowView: View {
             }, label: {
                 Image(systemName: "trash.fill")
                     .foregroundStyle(.red)
+                    .font(.title3)
             })
+            .padding(5)
+            
             VStack(alignment: .leading) {
                 Text(task.title ?? "No Title")
                     .font(.headline)
@@ -46,9 +49,11 @@ struct TaskRowView: View {
             if task.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
+                    .font(.title3)
             } else {
                 Image(systemName: "circle")
                     .foregroundColor(.gray)
+                    .font(.title3)
             }
         }
         .padding(.vertical, 5)

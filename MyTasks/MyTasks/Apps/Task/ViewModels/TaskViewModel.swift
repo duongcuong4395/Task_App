@@ -19,6 +19,32 @@ class TaskListViewModel: ObservableObject {
     private let context = CoreDataManager.shared.persistentContainer.viewContext
     private let notificationManager = NotificationManager.shared
             
+    
+    var completedTasksCount: Int {
+        tasksCD.filter { $0.isCompleted }.count
+    }
+    
+    var pendingTasksCount: Int {
+        tasksCD.filter { !$0.isCompleted }.count
+    }
+    
+    func tasksCount(byPriority priority: String) -> Int {
+        tasksCD.filter { $0.priority == priority }.count
+    }
+    
+    func tasksOverTime() -> [(date: Date, count: Int)] {
+        var taskCountByDate: [Date: Int] = [:]
+        
+        for task in tasksCD {
+            let dueDate = Calendar.current.startOfDay(for: task.dueDate ?? Date())
+            taskCountByDate[dueDate, default: 0] += 1
+        }
+        
+        return taskCountByDate
+            .sorted(by: { $0.key < $1.key })
+            .map { (date: $0.key, count: $0.value) }
+    }
+    
     init() {
         fetchTasks()
     }
