@@ -16,12 +16,13 @@ class TaskListViewModel: ObservableObject {
         fetchTasks()
     }
     
-    func addTask(title: String, dueDate: Date?, priority: String) {
+    func addTask(title: String, dueDate: Date?, priority: String, category: String) {
         let newTask = TaskCD(context: context)
         newTask.id = UUID()
         newTask.title = title
         newTask.dueDate = dueDate
         newTask.priority = priority
+        newTask.category = category
         newTask.isCompleted = false
         
         saveContext()
@@ -42,13 +43,13 @@ class TaskListViewModel: ObservableObject {
     
     func updateTask(task: TaskCD) {
         saveContext()
-        fetchTasks()  // Refresh the task list
+        fetchTasks()
     }
     
     func deleteTask(task: TaskCD) {
         context.delete(task)
         saveContext()
-        fetchTasks()  // Refresh the task list
+        fetchTasks()
     }
     
     private func saveContext() {
