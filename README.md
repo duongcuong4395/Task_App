@@ -1,10 +1,9 @@
 # MyTasks
 
-![5](https://github.com/user-attachments/assets/8e629319-e7e8-410d-9def-4e07767b6456)
-![4](https://github.com/user-attachments/assets/fcb0545a-a08b-4d2a-8d25-665fb95d82d8)
-![3](https://github.com/user-attachments/assets/0d69df5c-42f8-4e97-b6db-e75bf1b01416)
-![2](https://github.com/user-attachments/assets/4b14943b-370d-4d53-8f79-4d4aa4c3472d)
-![1](https://github.com/user-attachments/assets/5e365565-3c92-40b7-b725-b4befa010a7f)
+1 | 2 | 3 | 4 | 5
+:-: | :-: | :-: | :-: | :-:
+<img src="https://github.com/user-attachments/assets/8e629319-e7e8-410d-9def-4e07767b6456"> | <img src="https://github.com/user-attachments/assets/fcb0545a-a08b-4d2a-8d25-665fb95d82d8"> | <img src="https://github.com/user-attachments/assets/0d69df5c-42f8-4e97-b6db-e75bf1b01416"> | <img src="https://github.com/user-attachments/assets/4b14943b-370d-4d53-8f79-4d4aa4c3472d"> | <img src="https://github.com/user-attachments/assets/5e365565-3c92-40b7-b725-b4befa010a7f">
+
 
 
 ## Design decisions and rationale
