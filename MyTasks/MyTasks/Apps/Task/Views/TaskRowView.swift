@@ -10,6 +10,7 @@ import SwiftUI
 struct TaskRowView: View {
     @EnvironmentObject var viewModel: TaskListViewModel
     @EnvironmentObject var lnManager: LocalNotificationManager
+    @StateObject var hapticsManager = HapticsManager()
     var task: TaskCD
     
     var body: some View {
@@ -19,6 +20,7 @@ struct TaskRowView: View {
                 lnManager.removeRequest(with: "\(id)")
                 
                 deleteTask()
+                hapticsManager.warningHaptic()
             }, label: {
                 Image(systemName: "trash.fill")
                     .foregroundStyle(.red)

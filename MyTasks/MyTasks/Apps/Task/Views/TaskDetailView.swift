@@ -10,7 +10,7 @@ import SwiftUI
 struct TaskDetailView: View {
     @EnvironmentObject var viewModel: TaskListViewModel
     @EnvironmentObject var lnManager: LocalNotificationManager
-    
+    @StateObject var hapticsManager = HapticsManager()
     @State private var title: String
     @State private var dueDate: Date
     @State private var priority: String
@@ -18,8 +18,9 @@ struct TaskDetailView: View {
     @State private var isCompleted: Bool
     
     @State private var showingDatePicker = false  // Biến trạng thái để hiển thị DatePicker tùy chỉnh
-    
     var task: TaskCD
+    
+    
     
     init(task: TaskCD) {
         self.task = task
@@ -48,6 +49,7 @@ struct TaskDetailView: View {
                         
                         viewModel.deleteTask(task: task)
                         viewModel.page = .ListTask
+                        hapticsManager.errorHaptic()
                     }
                 }, label: {
                     Image(systemName: "trash.fill")
@@ -118,17 +120,8 @@ struct TaskDetailView: View {
                                     Task {
                                         await lnManager.schedule(by: notificationModel)
                                     }
+                                    hapticsManager.warningHaptic()
                                 }
-                                
-                                /*
-                                 let dataComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-                                 
-                                 let notificationModel = NotificationModel(id: "\(id)", title: "My Task", body: taskCD.title ?? "", datecomponents: dataComponent, repeats: false, moreData: ["" : ""])
-                                 Task {
-                                     await lnManager.schedule(by: notificationModel)
-                                 }
-                                 */
-                                
                                 viewModel.page = .ListTask
                             }
                         }

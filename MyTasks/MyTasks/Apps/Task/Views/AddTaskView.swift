@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 struct AddTaskView: View {
     // MARK: - Properties
@@ -23,6 +24,8 @@ struct AddTaskView: View {
     
     @State private var showPermissionAlert: Bool = false
     @State private var showSettingsAlert: Bool = false
+    
+    @StateObject var hapticsManager = HapticsManager()
     
     // MARK: - Views
     var body: some View {
@@ -75,6 +78,7 @@ struct AddTaskView: View {
                         Spacer()
                         Button("Save") {
                             withAnimation {
+                                
                                 if title.isEmpty {
                                     return
                                 }
@@ -93,6 +97,9 @@ struct AddTaskView: View {
                                     let dataComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
                                     
                                     let notificationModel = NotificationModel(id: "\(id)", title: "My Task", body: taskCD.title ?? "", datecomponents: dataComponent, repeats: false, moreData: ["" : ""])
+                                    
+                                    hapticsManager.successHaptic()
+                                    
                                     Task {
                                         await lnManager.schedule(by: notificationModel)
                                     }
@@ -100,6 +107,7 @@ struct AddTaskView: View {
                                 viewModel.page = .ListTask
                             }
                         }
+                        
                     }
                 }
             }
@@ -150,3 +158,7 @@ extension AddTaskView {
         }
     }
 }
+
+
+
+

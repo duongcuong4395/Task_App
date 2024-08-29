@@ -31,41 +31,46 @@ struct DashboardView: View {
             
             
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     // Biểu đồ tròn cho Completed vs Pending Tasks
-                    PieChartView(
-                        data: [
-                            PieChartDataEntry(value: Double(viewModel.completedTasksCount), label: "Completed"),
-                            PieChartDataEntry(value: Double(viewModel.pendingTasksCount), label: "Pending")
-                        ],
-                        label: "Completion Status"
-                    )
-                    .frame(height: 300)
-                    .padding()
+                    Section("Completed vs Pending Tasks") {
+                        PieChartView(
+                            data: [
+                                PieChartDataEntry(value: Double(viewModel.completedTasksCount), label: "Completed"),
+                                PieChartDataEntry(value: Double(viewModel.pendingTasksCount), label: "Pending")
+                            ],
+                            label: "Completion Status"
+                        )
+                        .frame(height: 300)
+                        .padding()
+                    }
+                    
                     
                     Divider()
+                    Section("High vs Medium vs Low") {
+                        BarChartView(
+                            data: [
+                                BarChartDataEntry(x: 0, y: Double(viewModel.tasksCount(byPriority: "High"))),
+                                BarChartDataEntry(x: 1, y: Double(viewModel.tasksCount(byPriority: "Medium"))),
+                                BarChartDataEntry(x: 2, y: Double(viewModel.tasksCount(byPriority: "Low")))
+                            ],
+                            labels: ["High", "Medium", "Low"],
+                            title: "Tasks by Priority"
+                        )
+                        .frame(height: 300)
+                        .padding()
+                    }
                     
-                    BarChartView(
-                        data: [
-                            BarChartDataEntry(x: 0, y: Double(viewModel.tasksCount(byPriority: "High"))),
-                            BarChartDataEntry(x: 1, y: Double(viewModel.tasksCount(byPriority: "Medium"))),
-                            BarChartDataEntry(x: 2, y: Double(viewModel.tasksCount(byPriority: "Low")))
-                        ],
-                        labels: ["High", "Medium", "Low"],
-                        title: "Tasks by Priority"
-                    )
-                    .frame(height: 300)
-                    .padding()
                     
                     Divider()
-                    
-                    LineChartView(
-                        data: viewModel.tasksOverTime(),
-                        title: "Tasks Over Time"
-                    )
-                    .frame(height: 300)
-                    .padding()
-                    
+                    Section("Tasks Over Time") {
+                        LineChartView(
+                            data: viewModel.tasksOverTime(),
+                            title: "Tasks Over Time"
+                        )
+                        .frame(height: 300)
+                        .padding()
+                    }
                     Spacer()
                 }
                 .padding()
