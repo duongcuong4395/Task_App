@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="22G720" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="SubtaskCD" representedClassName="SubtaskCD" syncable="YES">
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="priority" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="parentTask" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TaskCD" inverseName="subtask" inverseEntity="TaskCD"/>
+    </entity>
     <entity name="TaskCD" representedClassName="TaskCD" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -8,5 +16,6 @@
         <attribute name="position" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="priority" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="subtask" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SubtaskCD" inverseName="parentTask" inverseEntity="SubtaskCD"/>
     </entity>
 </model>

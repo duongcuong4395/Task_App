@@ -16,9 +16,7 @@ class TaskListViewModel: ObservableObject {
     @Published var taskDetail: TaskCD?
     @Published var page: Page = .ListTask
     private let context = CoreDataManager.shared.persistentContainer.viewContext
-    
     @Published var draggedTask: TaskCD?
-
     
     var completedTasksCount: Int {
         tasksCD.filter { $0.isCompleted }.count
@@ -49,7 +47,7 @@ class TaskListViewModel: ObservableObject {
         fetchTasks()
     }
     
-    @MainActor
+    //@MainActor
     func addTask(title: String, dueDate: Date?, priority: String, category: String, completion: @escaping (TaskCD) -> Void) {
         let newTask = TaskCD(context: context)
         newTask.id = UUID()
@@ -58,7 +56,7 @@ class TaskListViewModel: ObservableObject {
         newTask.priority = priority
         newTask.category = category
         newTask.isCompleted = false
-        // Đặt position cho task mới
+        
         newTask.position = (tasksCD.last?.position ?? 0) + 1
         saveContext()
         fetchTasks()  
@@ -92,6 +90,13 @@ class TaskListViewModel: ObservableObject {
     }
     
     func deleteTask(task: TaskCD) {
+        /*
+        if let subtasks = task.subtask as? Set<SubtaskCD> {
+           for subtask in subtasks {
+               context.delete(subtask)
+           }
+       }
+        */
         context.delete(task)
         saveContext()
         fetchTasks()
@@ -105,6 +110,26 @@ class TaskListViewModel: ObservableObject {
         for (index, task) in tasksCD.enumerated() {
             task.position = Int64(index)
         }
+        saveContext()
+    }
+}
+
+
+// MARK: - For Sub Task
+extension TaskListViewModel {
+    func addSubtask(to task: TaskCD, title: String, dueDate: Date?) {
+        let newSubtask = SubtaskCD(context: context)
+        newSubtask.id = UUID()
+        newSubtask.title = title
+        newSubtask.dueDate = dueDate
+        newSubtask.isCompleted = false
+        newSubtask.parentTask = task
+        
+        saveContext()
+    }
+    
+    func deleteSubtask(_ subtask: SubtaskCD) {
+        context.delete(subtask)
         saveContext()
     }
 }

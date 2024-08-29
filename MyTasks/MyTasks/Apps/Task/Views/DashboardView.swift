@@ -23,11 +23,12 @@ struct DashboardView: View {
                     Label("Back", systemImage: "chevron.left")
                 }
                 Spacer()
-                Text("Task Statistics")
+                Text("Dashboard")
                     .font(.title3)
                     .bold()
                 Spacer()
             }
+            .padding(0)
             
             
             ScrollView {
