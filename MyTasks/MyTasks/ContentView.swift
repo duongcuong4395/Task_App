@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) var scenePhase
+    @StateObject var lnManager = LocalNotificationManager()
     var body: some View {
         VStack {
             //TaskListView()
             ListTaskView()
         }
-        //.padding()
+        .environmentObject(lnManager)
+        .task {
+            try? await lnManager.requestAuthorization()
+        }
+        .onChange(of: scenePhase, { oldValue, newValue in
+            if newValue == .active {
+                Task {
+                    await lnManager.getCurrentSetting()
+                    await lnManager.getPendingRequests()
+                }
+            }
+        })
     }
 }

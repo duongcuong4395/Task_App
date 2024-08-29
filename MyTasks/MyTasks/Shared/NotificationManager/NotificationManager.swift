@@ -7,103 +7,158 @@
 
 import Foundation
 import UserNotifications
-import UIKit
+import NotificationCenter
 
-class NotificationManager: NSObject, ObservableObject  {
-    static let shared = NotificationManager()
-
-    @Published var authorizationStatus: UNAuthorizationStatus = .notDetermined
+struct NotificationModel {
+    var id: String
+    var title: String
+    var body: String
+    var subTitle: String?
+    var timeInterval: Double?
+    var datecomponents: DateComponents?
+    var moreData: [AnyHashable: Any]
+    var repeats: Bool
     
-    private override init() {
+    //var model
+    
+    enum ScheduleType {
+        case time, calendar
+    }
+    
+    var scheduleType: ScheduleType
+    
+    internal init(id: String, title: String, body: String
+         , timeInterval: Double
+         , repeats: Bool
+         , moreData: [AnyHashable: Any]) {
+        self.id = id
+        self.title = title
+        self.body = body
+        self .scheduleType = .time
+        self.timeInterval = timeInterval
+        self.datecomponents = nil
+        self.repeats = repeats
+        self.moreData = moreData
+    }
+    
+    init(id: String, title: String, body: String
+         , datecomponents: DateComponents
+         , repeats: Bool
+         , moreData: [AnyHashable: Any]) {
+        self.id = id
+        self.title = title
+        self.body = body
+        self.timeInterval = nil
+        self .scheduleType = .calendar
+        self.datecomponents = datecomponents
+        self.repeats = repeats
+        self.moreData = moreData
+    }
+}
+
+@MainActor
+class LocalNotificationManager: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+    let notifyCenter = UNUserNotificationCenter.current()
+    @Published var isGranted: Bool = false
+    @Published var pendingRequests: [UNNotificationRequest] = []
+    
+    override init() {
         super.init()
-        UNUserNotificationCenter.current().delegate = self
-        refreshAuthorizationStatus()
+        notifyCenter.delegate = self
     }
     
-}
-
-extension NotificationManager {
-    func refreshAuthorizationStatus() {
-       UNUserNotificationCenter.current().getNotificationSettings { settings in
-           DispatchQueue.main.async {
-               self.authorizationStatus = settings.authorizationStatus
-           }
-       }
-   }
-   
-   // Yêu cầu quyền thông báo từ người dùng
-   func requestAuthorization(completion: @escaping (Bool) -> Void) {
-       UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-           DispatchQueue.main.async {
-               self.refreshAuthorizationStatus()
-               completion(granted)
-           }
-           if let error = error {
-               print("Error requesting notification authorization: \(error.localizedDescription)")
-           }
-       }
-   }
-}
-
-extension NotificationManager {
-    func scheduleNotification(id: String, title: String, body: String, date: Date) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = .default
-
-        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error)")
+    func requestAuthorization() async throws {
+        try await notifyCenter
+            .requestAuthorization(options: [.sound, .badge, .alert])
+        await getCurrentSetting()
+    }
+    
+    func getCurrentSetting() async {
+        let currentSetting = await notifyCenter.notificationSettings()
+        isGranted = (currentSetting.authorizationStatus == .authorized)
+        //print("getCurrentSetting.isGranted:", isGranted)
+    }
+    
+    func openSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(url) {
+                Task {
+                    await UIApplication.shared.open(url)
+                }
             }
         }
     }
+    
+    
+}
 
-    func removeNotification(id: String) {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+
+// MARK: - Events
+extension LocalNotificationManager {
+    
+    
+    func schedule(by data: NotificationModel) async {
+        let content = UNMutableNotificationContent()
+        content.title = data.title
+        content.body = data.body
+        content.sound = .default
+        content.userInfo = data.moreData
+        
+        if let subTitle = data.subTitle {
+            content.subtitle = subTitle
+        }
+        
+        if data.scheduleType == .time {
+            guard let timeInterval = data.timeInterval else { return }
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval
+                                                            , repeats: data.repeats)
+            let request = UNNotificationRequest(identifier: data.id
+                                                , content: content
+                                                , trigger: trigger)
+            try? await notifyCenter.add(request)
+        } else {
+            guard let datecomponents = data.datecomponents else { return }
+            let trigger = UNCalendarNotificationTrigger(dateMatching: datecomponents, repeats: data.repeats)
+            let request = UNNotificationRequest(identifier: data.id
+                                                , content: content
+                                                , trigger: trigger)
+            try? await notifyCenter.add(request)
+        }
+        
+        
+        
+        await getPendingRequests()
     }
-
-    func removeNotification(byTitle title: String) {
-        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            let matchingRequests = requests.filter { $0.content.title == title }
-            let identifiers = matchingRequests.map { $0.identifier }
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+    
+    func getPendingRequests() async {
+        pendingRequests = await notifyCenter.pendingNotificationRequests()
+        print("pendingRequests:", pendingRequests.count)
+    }
+    
+    func removeRequest(with id: String) {
+        notifyCenter.removePendingNotificationRequests(withIdentifiers: [id])
+        
+        
+        if let index = pendingRequests.firstIndex(where: { $0.identifier == id }) {
+            pendingRequests.remove(at: index)
+            print("pendingRequests:", pendingRequests.count)
         }
     }
     
-    func showNotificationNow(id: String, title: String, body: String) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error showing notification: \(error)")
-            }
-        }
+    func clearRequests() {
+        notifyCenter.removeAllPendingNotificationRequests()
+        pendingRequests.removeAll()
     }
 }
 
-extension NotificationManager: UNUserNotificationCenterDelegate {
-    
-    // Handle notification when the app is in the foreground
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.banner, .sound])
-    }
 
-    // Handle notification response when the app is opened via the notification
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        // Handle the notification tap event here
-        print("Notification tapped: \(response.notification.request.identifier)")
-        completionHandler()
+// MARK: - For Delegate
+extension LocalNotificationManager {
+    
+    // run notify in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter
+                                , willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        await getPendingRequests()
+        return [.sound, .banner]
     }
 }

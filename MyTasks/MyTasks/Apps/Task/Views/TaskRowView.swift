@@ -10,11 +10,16 @@ import SwiftUI
 struct TaskRowView: View {
     
     @EnvironmentObject var viewModel: TaskListViewModel
+    @EnvironmentObject var lnManager: LocalNotificationManager
+    
     var task: TaskCD
     
     var body: some View {
         HStack {
             Button(action: {
+                guard let id = task.id else { return }
+                lnManager.removeRequest(with: "\(id)")
+                
                 deleteTask()
             }, label: {
                 Image(systemName: "trash.fill")

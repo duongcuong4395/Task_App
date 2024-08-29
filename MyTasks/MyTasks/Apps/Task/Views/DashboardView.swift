@@ -24,7 +24,7 @@ struct DashboardView: View {
                 }
                 Spacer()
                 Text("Task Statistics")
-                    .font(.largeTitle)
+                    .font(.title3)
                     .bold()
                 Spacer()
             }
@@ -45,7 +45,6 @@ struct DashboardView: View {
                     
                     Divider()
                     
-                    // Biểu đồ cột cho Tasks by Priority
                     BarChartView(
                         data: [
                             BarChartDataEntry(x: 0, y: Double(viewModel.tasksCount(byPriority: "High"))),
@@ -57,6 +56,8 @@ struct DashboardView: View {
                     )
                     .frame(height: 300)
                     .padding()
+                    
+                    Divider()
                     
                     LineChartView(
                         data: viewModel.tasksOverTime(),

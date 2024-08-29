@@ -17,8 +17,7 @@ class TaskListViewModel: ObservableObject {
     @Published var page: Page = .ListTask
     
     private let context = CoreDataManager.shared.persistentContainer.viewContext
-    private let notificationManager = NotificationManager.shared
-            
+    
     
     var completedTasksCount: Int {
         tasksCD.filter { $0.isCompleted }.count
@@ -49,7 +48,7 @@ class TaskListViewModel: ObservableObject {
         fetchTasks()
     }
     @MainActor
-    func addTask(title: String, dueDate: Date?, priority: String, category: String) {
+    func addTask(title: String, dueDate: Date?, priority: String, category: String, completion: @escaping (TaskCD) -> Void) {
         let newTask = TaskCD(context: context)
         newTask.id = UUID()
         newTask.title = title
@@ -60,10 +59,12 @@ class TaskListViewModel: ObservableObject {
         
         saveContext()
         fetchTasks()  
-        
+        completion(newTask)
+        /*
         if let id = newTask.id?.uuidString, let dueDate = dueDate {
             notificationManager.scheduleNotification(id: id, title: title, body: "Your task is due!", date: dueDate)
         }
+        */
     }
     
     func fetchTasks() {
@@ -83,22 +84,28 @@ class TaskListViewModel: ObservableObject {
         
     }
     
-    func updateTask(task: TaskCD) {
+    func updateTask(task: TaskCD, completion: @escaping (TaskCD) -> Void) {
         objectWillChange.send()
         saveContext()
         fetchTasks()
         
+        completion(task)
+        
+        /*
         if let id = task.id?.uuidString, let dueDate = task.dueDate {
             notificationManager.removeNotification(id: id)
             notificationManager.scheduleNotification(id: id, title: task.title ?? "No Title", body: "Your task is due!", date: dueDate)
         }
+         */
     }
     
     func deleteTask(task: TaskCD) {
         
+        /*
         if let id = task.id?.uuidString {
            notificationManager.removeNotification(id: id)
         }
+        */
         
         context.delete(task)
         saveContext()

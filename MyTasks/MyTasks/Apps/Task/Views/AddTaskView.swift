@@ -9,10 +9,12 @@ import SwiftUI
 
 struct AddTaskView: View {
     // MARK: - Properties
+    @Environment(\.scenePhase) var scenePhase
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var viewModel: TaskListViewModel
     
-    @ObservedObject var notificationManager = NotificationManager.shared
+    
+    @EnvironmentObject var lnManager: LocalNotificationManager
     
     @State private var title: String = ""
     @State private var dueDate: Date = Date()
@@ -76,8 +78,25 @@ struct AddTaskView: View {
                                 if title.isEmpty {
                                     return
                                 }
-                                handleSaveAction()
-                                //viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
+                                
+                                if lnManager.isGranted { } else {
+                                    lnManager.openSettings()
+                                }
+                                
+                                viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category) { taskCD in
+                                    
+                                    guard let date = taskCD.dueDate
+                                            , let id = taskCD.id else {
+                                        return
+                                    }
+                                    
+                                    let dataComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+                                    
+                                    let notificationModel = NotificationModel(id: "\(id)", title: "My Task", body: taskCD.title ?? "", datecomponents: dataComponent, repeats: false, moreData: ["" : ""])
+                                    Task {
+                                        await lnManager.schedule(by: notificationModel)
+                                    }
+                                }
                                 viewModel.page = .ListTask
                             }
                         }
@@ -89,7 +108,7 @@ struct AddTaskView: View {
                     title: Text("Notification Permission Required"),
                     message: Text("Please enable notifications to create a new task."),
                     primaryButton: .default(Text("Allow")) {
-                        requestNotificationPermission()
+                        //requestNotificationPermission()
                     },
                     secondaryButton: .cancel {
                         //presentationMode.wrappedValue.dismiss()
@@ -101,7 +120,7 @@ struct AddTaskView: View {
                    title: Text("Notifications Disabled"),
                    message: Text("Please enable notifications in Settings to create a new task."),
                    primaryButton: .default(Text("Open Settings")) {
-                       openAppSettings()
+                       //openAppSettings()
                    },
                    secondaryButton: .cancel {
                        //presentationMode.wrappedValue.dismiss()
@@ -109,50 +128,21 @@ struct AddTaskView: View {
                )
            }
         }
-        .onAppear {
-            checkNotificationPermission()
+        .onAppear{
+            if lnManager.isGranted { } else {
+                lnManager.openSettings()
+            }
+        }
+        .onChange(of: scenePhase) { oldValue, newValue in
+            if lnManager.isGranted { } else {
+                lnManager.openSettings()
+            }
         }
     }
 }
 
 // MARK: - Events
 extension AddTaskView {
-    private func handleSaveAction() {
-        switch notificationManager.authorizationStatus {
-        case .authorized:
-            viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
-            //presentationMode.wrappedValue.dismiss()
-        case .notDetermined:
-            showPermissionAlert = true
-        case .denied:
-            showSettingsAlert = true
-        default:
-            showSettingsAlert = true
-        }
-        
-        //viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
-        //presentationMode.wrappedValue.dismiss()
-    }
-    
-    private func checkNotificationPermission() {
-       notificationManager.refreshAuthorizationStatus()
-       if notificationManager.authorizationStatus == .denied {
-           showSettingsAlert = true
-       } else if notificationManager.authorizationStatus == .notDetermined {
-           showPermissionAlert = true
-       }
-    }
-    
-    private func requestNotificationPermission() {
-        notificationManager.requestAuthorization { granted in
-            if granted {
-                //viewModel.addTask(title: title, dueDate: dueDate, priority: priority, category: category)
-                presentationMode.wrappedValue.dismiss()
-            } else {
-                showSettingsAlert = true
-            }
-        }
-    }
         
     private func openAppSettings() {
         if let appSettings = URL(string: UIApplication.openSettingsURLString) {

@@ -6,73 +6,6 @@
 //
 
 import SwiftUI
-/*
-struct TaskListView: View {
-    @StateObject private var viewModel = TaskListViewModel()
-    
-    @State private var isShowingAddTaskView = false
-    @State private var selectedCategory: String = "All"
-    
-    var sortedTasks: [TaskCD] {
-        let filteredTasks = viewModel.tasksCD.filter { task in
-            selectedCategory == "All" || task.category == selectedCategory
-        }
-        return filteredTasks.sorted(by: { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) })
-    }
-
-    var body: some View {
-        NavigationView {
-            
-            VStack {
-                Picker("Category", selection: $selectedCategory) {
-                    Text("All").tag("All")
-                    Text("Work").tag("Work")
-                    Text("Personal").tag("Personal")
-                    Text("Others").tag("Others")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                
-                List {
-                    ForEach(viewModel.tasksCD) { task in
-                        NavigationLink(destination: TaskDetailView(task: task, viewModel: viewModel)) {
-                            TaskRowView(task: task)
-                        }
-                        .onDelete(perform: deleteTask)
-                    }
-                }
-                
-            }
-            .navigationTitle("Tasks")
-            .toolbar {
-                Button(action: {
-                    isShowingAddTaskView = true
-                }) {
-                    Label("Add Task", systemImage: "plus")
-                }
-            }
-            .sheet(isPresented: $isShowingAddTaskView) {
-                AddTaskView(viewModel: viewModel)
-            }
-        }
-        .task {
-            print("TaskListView.task")
-        }
-        .onAppear{
-            print("TaskListView.onAppear")
-        }
-        .onChange(of: viewModel.tasksCD) { vl, newVL in
-            print("TaskListView.onChange.tasksCD")
-        }
-        .environmentObject(viewModel)
-    }
-    
-    private func deleteTask(at offsets: IndexSet) {
-        offsets.map { viewModel.tasksCD[$0] }.forEach(viewModel.deleteTask)
-    }
-    
-}
-*/
 
 enum Page {
     case ListTask
@@ -91,7 +24,7 @@ struct ListTaskView: View {
         let filteredTasks = viewModel.tasksCD.filter { task in
             selectedCategory == "All" || task.category == selectedCategory
         }
-        return filteredTasks.sorted(by: { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) })
+        return filteredTasks//.sorted(by: { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) })
     }
     
     var body: some View {
@@ -124,21 +57,22 @@ struct ListTaskView: View {
                         Text("Others").tag("Others")
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    //.padding()
+                    
                     ScrollView(showsIndicators: false) {
-                        ForEach(sortedTasks) { task in
-                            TaskRowView(task: task)
-                                .onTapGesture {
-                                    withAnimation {
-                                        viewModel.taskDetail = task
-                                        viewModel.page = .TaskDetail
+                        LazyVStack {
+                            ForEach(sortedTasks) { task in
+                                TaskRowView(task: task)
+                                    .onTapGesture {
+                                        withAnimation(.spring()) {
+                                            viewModel.taskDetail = task
+                                            viewModel.page = .TaskDetail
+                                        }
                                     }
-                                    
-                                }
-                                
+                                    .padding(5)
+                                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                            }
                         }
                     }
-                    
                     Spacer()
                 }
                 .padding()

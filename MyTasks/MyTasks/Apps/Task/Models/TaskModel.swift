@@ -9,6 +9,7 @@ import Foundation
 
 
 // Models/Task.swift
+/*
 protocol Task {
     var id: UUID { get }
     var title: String { get set }
@@ -40,3 +41,4 @@ enum TaskPriority {
 enum TaskCategory {
     case work, personal, others
 }
+*/

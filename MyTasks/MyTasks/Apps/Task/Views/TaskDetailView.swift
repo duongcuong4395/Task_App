@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TaskDetailView: View {
     @EnvironmentObject var viewModel: TaskListViewModel
+    @EnvironmentObject var lnManager: LocalNotificationManager
     
     @State private var title: String
     @State private var dueDate: Date
@@ -42,6 +43,9 @@ struct TaskDetailView: View {
                 Spacer()
                 Button(action: {
                     withAnimation {
+                        guard let id = task.id else { return }
+                        lnManager.removeRequest(with: "\(id)")
+                        
                         viewModel.deleteTask(task: task)
                         viewModel.page = .ListTask
                     }
@@ -54,24 +58,8 @@ struct TaskDetailView: View {
                 Section(header: Text("Task Detail")) {
                     TextField("Title", text: $title)
                     DatePicker("Due Date", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
-                    /*
-                    HStack {
-                        Text("Due Date")
-                        Spacer()
-                        Text(dueDate, style: .date)
-                            .onTapGesture {
-                                showingDatePicker.toggle()
-                            }
-                        Text(dueDate, style: .time)
-                            .onTapGesture {
-                                showingDatePicker.toggle()
-                            }
-                    }
-                    */
+                    
                     Picker("Priority", selection: $priority) {
-                        
-                        
-                        
                         HStack {
                             Text("High")
                             AppShare.priorityIcon(priority: "High")
@@ -106,8 +94,10 @@ struct TaskDetailView: View {
                         Button("Save") {
                             withAnimation {
                                 
-                                if title.isEmpty {
-                                    return
+                                if title.isEmpty { return }
+                                
+                                if lnManager.isGranted { } else {
+                                    lnManager.openSettings()
                                 }
                                 task.title = title
                                 task.dueDate = dueDate
@@ -115,7 +105,30 @@ struct TaskDetailView: View {
                                 task.category = category
                                 task.isCompleted = isCompleted
                                 
-                                viewModel.updateTask(task: task)
+                                viewModel.updateTask(task: task) { taskCD in
+                                    guard let id = taskCD.id else { return }
+                                    
+                                    lnManager.removeRequest(with: "\(id)")
+                                    
+                                    let date = dueDate
+                                    
+                                    let dataComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+                                    
+                                    let notificationModel = NotificationModel(id: "\(id)", title: "My Task", body: taskCD.title ?? "", datecomponents: dataComponent, repeats: false, moreData: ["" : ""])
+                                    Task {
+                                        await lnManager.schedule(by: notificationModel)
+                                    }
+                                }
+                                
+                                /*
+                                 let dataComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+                                 
+                                 let notificationModel = NotificationModel(id: "\(id)", title: "My Task", body: taskCD.title ?? "", datecomponents: dataComponent, repeats: false, moreData: ["" : ""])
+                                 Task {
+                                     await lnManager.schedule(by: notificationModel)
+                                 }
+                                 */
+                                
                                 viewModel.page = .ListTask
                             }
                         }
