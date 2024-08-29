@@ -2,7 +2,7 @@
 //  TaskCD+CoreDataProperties.swift
 //  MyTasks
 //
-//  Created by pc on 27/08/2024.
+//  Created by pc on 29/08/2024.
 //
 //
 
@@ -16,12 +16,14 @@ extension TaskCD {
         return NSFetchRequest<TaskCD>(entityName: "TaskCD")
     }
 
+    @NSManaged public var category: String?
     @NSManaged public var dueDate: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var isCompleted: Bool
     @NSManaged public var priority: String?
     @NSManaged public var title: String?
-    @NSManaged public var category: String?
+    @NSManaged public var position: Int64
+
 }
 
 extension TaskCD : Identifiable {

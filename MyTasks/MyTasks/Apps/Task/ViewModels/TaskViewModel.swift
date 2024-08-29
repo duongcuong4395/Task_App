@@ -15,9 +15,10 @@ class TaskListViewModel: ObservableObject {
     @Published var tasksCD: [TaskCD] = []
     @Published var taskDetail: TaskCD?
     @Published var page: Page = .ListTask
-    
     private let context = CoreDataManager.shared.persistentContainer.viewContext
     
+    @Published var draggedTask: TaskCD?
+
     
     var completedTasksCount: Int {
         tasksCD.filter { $0.isCompleted }.count
@@ -47,6 +48,7 @@ class TaskListViewModel: ObservableObject {
     init() {
         fetchTasks()
     }
+    
     @MainActor
     func addTask(title: String, dueDate: Date?, priority: String, category: String, completion: @escaping (TaskCD) -> Void) {
         let newTask = TaskCD(context: context)
@@ -56,20 +58,18 @@ class TaskListViewModel: ObservableObject {
         newTask.priority = priority
         newTask.category = category
         newTask.isCompleted = false
-        
+        // Đặt position cho task mới
+        newTask.position = (tasksCD.last?.position ?? 0) + 1
         saveContext()
         fetchTasks()  
         completion(newTask)
-        /*
-        if let id = newTask.id?.uuidString, let dueDate = dueDate {
-            notificationManager.scheduleNotification(id: id, title: title, body: "Your task is due!", date: dueDate)
-        }
-        */
+        
     }
     
     func fetchTasks() {
         let request: NSFetchRequest<TaskCD> = TaskCD.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
+        //let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
         request.sortDescriptors = [sortDescriptor]
         DispatchQueue.main.async {
             do {
@@ -88,25 +88,10 @@ class TaskListViewModel: ObservableObject {
         objectWillChange.send()
         saveContext()
         fetchTasks()
-        
         completion(task)
-        
-        /*
-        if let id = task.id?.uuidString, let dueDate = task.dueDate {
-            notificationManager.removeNotification(id: id)
-            notificationManager.scheduleNotification(id: id, title: task.title ?? "No Title", body: "Your task is due!", date: dueDate)
-        }
-         */
     }
     
     func deleteTask(task: TaskCD) {
-        
-        /*
-        if let id = task.id?.uuidString {
-           notificationManager.removeNotification(id: id)
-        }
-        */
-        
         context.delete(task)
         saveContext()
         fetchTasks()
@@ -114,5 +99,12 @@ class TaskListViewModel: ObservableObject {
     
     private func saveContext() {
         CoreDataManager.shared.saveContext()
+    }
+    
+    func updateTaskOrder() {
+        for (index, task) in tasksCD.enumerated() {
+            task.position = Int64(index)
+        }
+        saveContext()
     }
 }

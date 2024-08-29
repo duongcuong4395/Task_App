@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    
     @EnvironmentObject var viewModel: TaskListViewModel
     @EnvironmentObject var lnManager: LocalNotificationManager
-    
     var task: TaskCD
     
     var body: some View {
@@ -69,33 +67,3 @@ struct TaskRowView: View {
     }
 }
 
-
-extension TaskRowView {
-    /*
-    private func priorityColor(priority: String) -> Color {
-        switch priority {
-        case "High":
-            return .red
-        case "Medium":
-            return .orange
-        case "Low":
-            return .blue
-        default:
-            return .gray
-        }
-    }
-
-    private func priorityIcon(priority: String) -> Image {
-        switch priority {
-        case "High":
-            return Image(systemName: "exclamationmark.triangle.fill")
-        case "Medium":
-            return Image(systemName: "exclamationmark.circle.fill")
-        case "Low":
-            return Image(systemName: "info.circle.fill")
-        default:
-            return Image(systemName: "circle.fill")
-        }
-    }
-    */
-}
