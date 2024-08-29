@@ -1,12 +1,14 @@
 # MyTasks
 
+## Screenshots and Video
+
 1 | 2 | 3 | 4 | 5
 :-: | :-: | :-: | :-: | :-:
 <img src="https://github.com/user-attachments/assets/8e629319-e7e8-410d-9def-4e07767b6456"> | <img src="https://github.com/user-attachments/assets/fcb0545a-a08b-4d2a-8d25-665fb95d82d8"> | <img src="https://github.com/user-attachments/assets/0d69df5c-42f8-4e97-b6db-e75bf1b01416"> | <img src="https://github.com/user-attachments/assets/4b14943b-370d-4d53-8f79-4d4aa4c3472d"> | <img src="https://github.com/user-attachments/assets/5e365565-3c92-40b7-b725-b4befa010a7f">
 
-1
+Video
 :-: 
-<video src="https://github.com/user-attachments/assets/b96f610d-39c3-43ab-82aa-a5148fe782ff"></video>
+<video src="https://github.com/user-attachments/assets/622a9a05-a080-4076-ba67-6e9cb711f5f0"></video>
 
 ## Design decisions and rationale
 - Core Data for Persistence: Chosen for its robust integration with SwiftUI and support for complex data relationships, ideal for managing tasks and subtasks.
