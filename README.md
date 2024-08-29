@@ -8,7 +8,7 @@ List Task | SubTasks | Edit | Options | Dashboard
 
 Video
 :-: 
-<video src="https://github.com/user-attachments/assets/622a9a05-a080-4076-ba67-6e9cb711f5f0"></video>
+<video src="https://github.com/user-attachments/assets/454740bc-26d0-4dd8-b5fb-c1c6777a02b8"></video>
 
 ## Design decisions and rationale
 - Core Data for Persistence: Chosen for its robust integration with SwiftUI and support for complex data relationships, ideal for managing tasks and subtasks.
