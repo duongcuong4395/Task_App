@@ -16,28 +16,9 @@ struct OnboardingView: View {
         OnboardingPage(title: "Welcome to My Task", description: "Easily manage your tasks and stay organized.", imageName: "checkmark.circle"),
         OnboardingPage(title: "Dashboard", description: "View your task statistics and progress.", imageName: "chart.line.uptrend.xyaxis.circle"),
         OnboardingPage(title: "Add Tasks", description: "Quickly add new tasks and set due dates.", imageName: "plus.circle"),
-        OnboardingPage(title: "magnifyingglass.circle", description: "Filter tasks by category to focus on what's important.", imageName: "slider.horizontal.3")
+        OnboardingPage(title: "Filter", description: "Filter tasks by category to focus on what's important.", imageName: "magnifyingglass.circle")
     ]
     
-    /*
-    var sortedTasks: [TaskCD] {
-        var tasks: [TaskCD] = []
-        
-        var task = TaskCD(context: CoreDataManager.shared.persistentContainer.viewContext)
-        task.id = UUID()
-        task.title = "Task 1"
-        task.dueDate = Date()
-        task
-        var subtasks: [SubtaskCD] = []
-        let newSubtask = SubtaskCD(context: CoreDataManager.shared.persistentContainer.viewContext)
-        newSubtask.id = UUID()
-        newSubtask.title = "sub task 1"
-        subtasks.append(newSubtask)
-        
-        return viewModel.tasksCD
-    }
-    */
-
     var body: some View {
         ZStack {
             /*

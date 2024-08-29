@@ -18,6 +18,12 @@
 		4F0DB6842C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DB6822C7D800A00DC8D02 /* TaskCoreData.xcdatamodeld */; };
 		4F389F2F2C7E0A840027D4E4 /* AppManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F389F2E2C7E0A840027D4E4 /* AppManage.swift */; };
 		4F389F312C7E1DC40027D4E4 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F389F302C7E1DC40027D4E4 /* DashboardView.swift */; };
+		4F7E95A52C80B64B005F375F /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95A02C80B64B005F375F /* 1.png */; };
+		4F7E95A62C80B64B005F375F /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95A12C80B64B005F375F /* 3.png */; };
+		4F7E95A72C80B64B005F375F /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95A22C80B64B005F375F /* 5.png */; };
+		4F7E95A82C80B64B005F375F /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95A32C80B64B005F375F /* 2.png */; };
+		4F7E95A92C80B64B005F375F /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95A42C80B64B005F375F /* 4.png */; };
+		4F7E95AB2C80B6E0005F375F /* video.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E95AA2C80B6DF005F375F /* video.mov */; };
 		4FB34D242C8060D600774051 /* HapticManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB34D232C8060D600774051 /* HapticManage.swift */; };
 		4FB34D262C806F9200774051 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB34D252C806F9200774051 /* OnboardingView.swift */; };
 		4FB34D332C807D0800774051 /* TaskCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB34D2F2C807D0800774051 /* TaskCD+CoreDataClass.swift */; };
@@ -43,6 +49,12 @@
 		4F0DB6832C7D800A00DC8D02 /* TaskCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskCoreData.xcdatamodel; sourceTree = "<group>"; };
 		4F389F2E2C7E0A840027D4E4 /* AppManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManage.swift; sourceTree = "<group>"; };
 		4F389F302C7E1DC40027D4E4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		4F7E95A02C80B64B005F375F /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		4F7E95A12C80B64B005F375F /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		4F7E95A22C80B64B005F375F /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
+		4F7E95A32C80B64B005F375F /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		4F7E95A42C80B64B005F375F /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
+		4F7E95AA2C80B6DF005F375F /* video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = video.mov; sourceTree = "<group>"; };
 		4FB34D232C8060D600774051 /* HapticManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManage.swift; sourceTree = "<group>"; };
 		4FB34D252C806F9200774051 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		4FB34D2F2C807D0800774051 /* TaskCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskCD+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -106,6 +118,8 @@
 		4F0DB6712C7D7E9500DC8D02 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4F7E95AC2C80B6EB005F375F /* Videos */,
+				4F7E959F2C80B607005F375F /* Images */,
 				4FB34D222C8060BF00774051 /* Haptic */,
 				4F389F2D2C7E0A720027D4E4 /* App */,
 				4FD8CF212C7DC691005846F6 /* NotificationManager */,
@@ -190,6 +204,26 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		4F7E959F2C80B607005F375F /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4F7E95A02C80B64B005F375F /* 1.png */,
+				4F7E95A32C80B64B005F375F /* 2.png */,
+				4F7E95A12C80B64B005F375F /* 3.png */,
+				4F7E95A42C80B64B005F375F /* 4.png */,
+				4F7E95A22C80B64B005F375F /* 5.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		4F7E95AC2C80B6EB005F375F /* Videos */ = {
+			isa = PBXGroup;
+			children = (
+				4F7E95AA2C80B6DF005F375F /* video.mov */,
+			);
+			path = Videos;
+			sourceTree = "<group>";
+		};
 		4FB34D222C8060BF00774051 /* Haptic */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,8 +298,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F7E95AB2C80B6E0005F375F /* video.mov in Resources */,
+				4F7E95A82C80B64B005F375F /* 2.png in Resources */,
+				4F7E95A92C80B64B005F375F /* 4.png in Resources */,
+				4F7E95A52C80B64B005F375F /* 1.png in Resources */,
+				4F7E95A72C80B64B005F375F /* 5.png in Resources */,
 				4F0DB66B2C7D7B0E00DC8D02 /* Preview Assets.xcassets in Resources */,
 				4F0DB6682C7D7B0E00DC8D02 /* Assets.xcassets in Resources */,
+				4F7E95A62C80B64B005F375F /* 3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
